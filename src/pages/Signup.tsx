@@ -1,12 +1,12 @@
 import { useNavigate } from 'react-router-dom'
 import { useEffect, useState } from 'react'
 
-import { authenticateUser } from '../services/user'
+import { createOneUser } from '../services/user'
 
 export default function Login() {
     const navigate = useNavigate();
 
-    const [form, setForm] = useState({})
+    const [form, setForm] = useState({ type: "CREATOR" })
     const [loading, setLoading] = useState(false)
     const [message, setMessage] = useState("")
     const [typeUser, setTypeUser] = useState("")
@@ -27,15 +27,16 @@ export default function Login() {
         e.preventDefault()
         setLoading(true)
 
-        const response = await authenticateUser(form)
-        
+        const response = await createOneUser(form)
+
+
         if (response.message.length > 0) {
             const { id, typeUser, email } = response.message[0]
             const myObject = { id, typeUser, email, pagination: 10 }
             window.sessionStorage.setItem("myObject", JSON.stringify(myObject));
             setTypeUser(typeUser)
         } else {
-            setMessage('No se encontro user o contraseña, intentelo nuevamente')
+            setMessage('Ha ocurrido un error ,intentelo nuevamente')
             setLoading(false)
         }
     }
@@ -52,21 +53,32 @@ export default function Login() {
                             alt="Your Company"
                         />
                         <h2 className="mt-6 text-center text-3xl font-bold tracking-tight text-gray-900">
-                            Login into your account
+                            Create a new account
                         </h2>
                         <p className="mt-2 text-center text-sm text-gray-600">
                             Or{' '}
-                            <a href="signup" className="font-medium text-indigo-600 hover:text-indigo-500">
-                                Create a new account in this link
+                            <a href="login" className="font-medium text-indigo-600 hover:text-indigo-500">
+                                Login into your account  in this link
                             </a>
                         </p>
                         {message.length > 0 ? <p className=" text-danger text-center">{message}</p >
                             : <p className='text-white'> espacio error</p>}
                     </div>
                     <form onSubmit={handlerSubmit}>
+                        <div className="sm:col-span-3">
+                            <div className="relative mb-6">
+                                <select onChange={handlerChange}
+                                    id="type"
+                                    autoComplete="country-name"
+                                    className="block w-full rounded-md border-0 py-3 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:max-w-xs sm:text-sm sm:leading-6"
+                                >
+                                    <option value="CREATOR">CREATOR</option>
+                                    <option value="READER">READER</option>
+                                </select>
+                            </div>
+                        </div>
+                        {/* email input  */}
                         <div className="sm:col-span-2">
-
-                            {/* email input  */}
                             <label htmlFor="email" className="block text-sm font-semibold leading-6 text-gray-900">
                                 Email
                             </label>
@@ -82,8 +94,8 @@ export default function Login() {
                         </div>
                         {/* Password input  */}
                         <div className="sm:col-span-2">
-                            <label htmlFor="password" className="block text-sm font-semibold leading-6 text-gray-900">
-                                Password
+                            <label htmlFor="Password" className="block text-sm font-semibold leading-6 text-gray-900">
+                            Password
                             </label>
                             <div className="mb-6">
                                 <input onChange={handlerChange}
@@ -96,6 +108,9 @@ export default function Login() {
                             </div>
                         </div>
 
+
+
+
                         {/* Submit button  */}
 
                         <button
@@ -105,7 +120,7 @@ export default function Login() {
                             <span className="absolute inset-y-0 left-0 flex items-center pl-3">
                                 {loading == true && <div className="spinner-border spinner-border-sm text-light" role="status"></div>}
                             </span>
-                            Login
+                            Create
                         </button>
 
 

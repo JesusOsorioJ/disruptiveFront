@@ -31,14 +31,13 @@ const DeleteConfirm: React.FC<Props> = ({ modal }) => {
   }
 
   return (
-    <div className="position-fixed w-100 top-0 start-0 border mw-75 ">
-      <div className="position-fixed w-100 top-0 bg-secondary bg-opacity-25 w-100 h-100"></div>
+    <div className="fixed w-full top-0 start-0 mw-75 ">
+    <div className="fixed w-full h-full top-0 bg-gray-600 opacity-25 "></div>
 
-      <div className="position-fixed top-0 w-100 h-100 d-flex justify-content-center align-items-center ">
-
-        <div className=" bg-white border border-2 border-secondary">
-          <div className='border-bottom p-3'>
-            <h4 className='text-secondary'>Delete confirm</h4>
+    <div className="fixed top-0 w-full h-full flex justify-center items-center ">
+     <div className=" bg-white border-2  border-gray-400 min-w-[500px]">
+          <div className='border-b p-3'>
+            <h4 className='text-[1.5rem] font-semibold '>Delete confirm</h4>
           </div>
           <div className="p-4">
 
@@ -49,10 +48,11 @@ const DeleteConfirm: React.FC<Props> = ({ modal }) => {
               {"< "}{modal.message}{" >"} ?</p>
 
           </div>
-          <div className="d-flex flex-row-reverse gap-4 border-top p-3">
-            <button type="button" className="btn btn-danger" onClick={handlerOnDelete}>
+          <div className="flex flex-row-reverse gap-4 border-t p-3">
+            <button type="button" className="block rounded-md bg-indigo-600 px-3.5 py-2.5 text-center text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+             onClick={handlerOnDelete}>
               {message[0] == true && <div className="spinner-border spinner-border-sm text-light" role="status"></div>}{message[1]}</button>
-            <button type="button" className="btn btn-secondary"
+            <button type="button" className="block rounded-md bg-indigo-600 px-3.5 py-2.5 text-center text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
               onClick={handlerOnCancel}>Cancel</button>
           </div>
         </div>

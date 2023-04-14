@@ -17,7 +17,7 @@ export default function Admin() {
   let [searchParams, setSearchParams] = useSearchParams()
 
   const [modal, setModal] = useState({ view: "", data: Initialcontent })
-  const [makerList, setMakerList] = useState({ data: [Initialcontent], total: 0 })
+  const [contentList, setContentList] = useState({ data: [Initialcontent], total: 0 })
   const [loading, setLoading] = useState(true)
 
   let params = { page: "1" }
@@ -31,8 +31,8 @@ export default function Admin() {
     }
 
     (async () => {
-      const responseAllMaker = await filterByAllContent({ ...params, invitation: false, pagination })
-      setMakerList(responseAllMaker.message)
+      const responseAllMaker = await filterByAllContent({ ...params, pagination })
+      setContentList(responseAllMaker.message)
       setLoading(false)
     })()
 
@@ -42,8 +42,8 @@ export default function Admin() {
 
     <div>
       <Header />
-      <div className="p-4">
-        <div className='d-flex justify-content-between '>
+      <div >
+        <div className='flex justify-between '>
           <h4>Makers</h4>
           <button type="button" onClick={() => { setModal({ view: "InviteNewMaker", data: Initialcontent }) }}
             className="btn btn-primary">Create New Post</button>
@@ -51,10 +51,10 @@ export default function Admin() {
 
         <FilterMaker typeOfFilter="filterMaker" loading={loading} setLoading={setLoading} />
 
-
-        {makerList.data.map(data =>
-          <a href={data.url} className="group relative inline-block overflow-hidden" style={{ width: "350", height: "350" }}>
-            <img src={data.urlImage} width="350" height="350" />
+       <div className='grid grid-cols-4 gap-6 px-12  py-6'>
+       {contentList.data.map(data =>
+          <a href={data.url} className="group relative inline-block overflow-hidden" style={{ width: "350px", height: "350px" }}>
+            <img src={data.urlImage} style={{ width: "350px", height: "350px" }}/>
             <button type="button" className="btn btn-outline-secondary mx-3"
               onClick={() => { setModal({ view: "InviteNewMaker", data: data }) }}>Edit</button>
             <button type="button" className="btn btn-outline-secondary mx-3"
@@ -69,6 +69,8 @@ export default function Admin() {
             </div>
           </a>
         )}
+       </div>
+       
 
         <Pagination />
 

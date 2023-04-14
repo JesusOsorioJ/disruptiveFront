@@ -28,7 +28,7 @@ export const Initialcontent = {
     id: 0,
     name: "",
     description: "",
-    urlImage: "",
+    urlImage: "https://www.copahost.com/blog/wp-content/uploads/2019/07/imgsize2.png",
     url: "",
     updatedAt: "",
     category: "",
@@ -48,7 +48,7 @@ export const Initialtopic = {
     name: "",
     urlImage: "",
     updatedAt: "",
-    categories: ['VIDEO','IMAGE','TEXT'],
+    categories: ['IMAGE'],
     contents: [Initialcontent]
 }
 

@@ -35,11 +35,11 @@ const InviteNewMaker: React.FC<Props> = ({ modal, setModal }) => {
     }
   }
   return (
-    <div className="position-fixed w-100 top-0 start-0 border mw-75 ">
-      <div className="position-fixed w-100 top-0 bg-secondary bg-opacity-25 w-100 h-100"></div>
+    <div className="fixed w-full top-0 start-0 border mw-75 ">
+      <div className="fixed w-full top-0 bg-secondary bg-opacity-25 w-100 h-100"></div>
 
-      <div className="position-fixed top-0 w-100 h-100 d-flex justify-content-center align-items-center ">
-        <form className="bg-white border border-2 border-secondary" onSubmit={handlerOnSubmit}>
+      <div className="fixed top-0 w-100 h-100 d-flex justify-content-center align-items-center ">
+        <form className="bg-white border-2 border-secondary" onSubmit={handlerOnSubmit}>
           <h4 className="border-bottom p-3 ">
             {Object.keys(modal.data).length == 0 ? 'Invite' : 'Update'} New Maker</h4>
           <div className="px-4 pb-4">

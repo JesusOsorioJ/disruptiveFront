@@ -1,8 +1,9 @@
 const API_URL = import.meta.env.REACT_APP_API_BASE_URL || "http://localhost:8080/api";
 
-export async function getAllTopic() {
+export async function getAllTopic(body:{}) {
     try {
-        const response = await fetch(`${API_URL}/userPrisma/filterbymaker?`)
+        const response = await fetch(`${API_URL}/topic/filterAllTopic?`+
+        new URLSearchParams(body).toString())
         const data = await response.json();
         return data;
     } catch (error: any) {
@@ -20,7 +21,7 @@ export async function createOneTopic(body: {}) {
         body: JSON.stringify(body),
     };
     try {
-        const response = await fetch(`${API_URL}/userPrisma`, payload);
+        const response = await fetch(`${API_URL}/topic`, payload);
         const data = await response.json();
         return data;
     } catch (error: any) {
@@ -36,7 +37,7 @@ export async function updateOneTopic(body: {}) {
         body: JSON.stringify(body),
     };
     try {
-        const response = await fetch(`${API_URL}/userPrisma`, payload);
+        const response = await fetch(`${API_URL}/topic`, payload);
         const data = await response.json();
         return data;
     } catch (error: any) {
@@ -50,7 +51,7 @@ export async function deleteOneTopic(id: number) {
         method: 'DELETE',
     };
     try {
-        const response = await fetch(`${API_URL}/userPrisma/${id}`, payload);
+        const response = await fetch(`${API_URL}/topic/${id}`, payload);
         const data = await response.json();
         return data;
     } catch (error: any) {

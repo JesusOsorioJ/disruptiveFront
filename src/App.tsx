@@ -6,6 +6,7 @@ import AdminUser from './pages/AdminUser';
 import AdminTopic from './pages/AdminTopic';
 
 import Login from './pages/Login';
+import Signup from './pages/Signup';
 import ErrorPage from './pages/ErrorPage';
 
 
@@ -22,6 +23,7 @@ function App() {
 
         <Route path="/*" element={<ErrorPage />} />
         <Route path="/login" element={<Login />} />
+        <Route path="/signup" element={<Signup />} />
         
       </Routes>
     </Router>

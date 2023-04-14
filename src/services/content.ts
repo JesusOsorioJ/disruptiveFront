@@ -2,7 +2,7 @@ const API_URL = import.meta.env.REACT_APP_API_BASE_URL || "http://localhost:8080
 
 export async function filterByAllContent(body: {}) {
     try {
-        const response = await fetch(`${API_URL}/userPrisma/filterbymaker?` +
+        const response = await fetch(`${API_URL}/content/filterbymaker?` +
             new URLSearchParams(body).toString())
         const data = await response.json();
         return data;
@@ -20,7 +20,7 @@ export async function createOneContent(body: {}) {
         body: JSON.stringify(body),
     };
     try {
-        const response = await fetch(`${API_URL}/userPrisma`, payload);
+        const response = await fetch(`${API_URL}/content`, payload);
         const data = await response.json();
         return data;
     } catch (error: any) {
@@ -36,7 +36,7 @@ export async function updateOneContent(body: {}) {
         body: JSON.stringify(body),
     };
     try {
-        const response = await fetch(`${API_URL}/userPrisma`, payload);
+        const response = await fetch(`${API_URL}/content`, payload);
         const data = await response.json();
         return data;
     } catch (error: any) {
@@ -50,7 +50,7 @@ export async function deleteOneContent(id: number) {
         method: 'DELETE',
     };
     try {
-        const response = await fetch(`${API_URL}/userPrisma/${id}`, payload);
+        const response = await fetch(`${API_URL}/content/${id}`, payload);
         const data = await response.json();
         return data;
     } catch (error: any) {

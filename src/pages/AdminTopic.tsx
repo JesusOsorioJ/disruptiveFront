@@ -2,7 +2,7 @@ import { useNavigate, useSearchParams } from 'react-router-dom'
 import { useState, useEffect } from 'react'
 import { format } from 'date-fns'
 
-import { filterByAllUser } from '../services/user'
+import { getAllTopic } from '../services/topic'
 
 import Header from '../components/Header'
 import FilterMaker from '../components/FilterMaker'
@@ -17,7 +17,7 @@ export default function Admin() {
   let [searchParams, setSearchParams] = useSearchParams()
 
   const [modal, setModal] = useState({ view: "admin", data: Initialtopic })
-  const [makerList, setMakerList] = useState({ data: [Initialtopic], total: 0 })
+  const [userList, setUserList] = useState({ data: [Initialtopic], total: 0 })
   const [loading, setLoading] = useState(true)
 
   let params = { page: "1" }
@@ -27,12 +27,13 @@ export default function Admin() {
 
   useEffect(() => {
     if (typeUser != 'admin') {
-      navigate('/')
+      // navigate('/')
     }
 
     (async () => {
-      const responseAllMaker = await filterByAllUser({ ...params, invitation: false, pagination })
-      setMakerList(responseAllMaker.message)
+      const responseAllMaker = await getAllTopic({ ...params, pagination })
+      
+      setUserList(responseAllMaker.message)
       setLoading(false)
     })()
 
@@ -45,33 +46,37 @@ export default function Admin() {
       <div className="p-4">
         <div className='d-flex justify-content-between '>
           <h4>Topic</h4>
-          <button type="button" onClick={() => { setModal({ view: "InviteNewMaker", data: Initialtopic }) }}
-            className="btn btn-primary">New Topic</button>
+          <button type="button" onClick={() => { setModal({ view: "NewTopic", data: Initialtopic }) }}
+            className="block rounded-md bg-indigo-600 px-3.5 py-2.5 text-center text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">
+              New Topic</button>
         </div>
 
         <FilterMaker typeOfFilter="filterMaker" loading={loading} setLoading={setLoading} />
 
-        <table className="table border">
-          <thead className="thead-light">
+        <table className="w-full text-sm text-left text-gray-500 dark:text-gray-400">
+        <thead className='text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400'>
+
             <tr>
-              <th scope="col">ID</th>
-              <th scope="col">Name</th>
-              <th scope="col">Categories</th>
-              <th scope="col">Created</th>
-              {makerList.total && <th scope="col">{pagination * parseInt(params.page)} of {makerList.total}</th>}
+              <th scope="col" className="px-6 py-3">ID</th>
+              <th scope="col" className="px-6 py-3">Name</th>
+              <th scope="col" className="px-6 py-3">Categories</th>
+              <th scope="col" className="px-6 py-3">Created</th>
+              {userList.total && <th scope="col">{pagination * parseInt(params.page)} of {userList.total}</th>}
             </tr>
           </thead>
           <tbody>
-            {makerList.data.map(step => <>
-              <tr>
-                <th>{step.id}</th>
-                <th>{step.name}</th>
-                <td>{step.categories.map((category) =>category+", ")}</td>
-                <td>{step.updatedAt&&format(Date.parse(step.updatedAt), 'MM/dd/yyyy HH:mm')}</td>
-                <td>
-                  <button type="button" className="btn btn-outline-secondary mx-3"
+            {userList.data.map(step => <>
+              <tr className="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
+
+              <th scope="row" className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                  {step.id}</th>
+                <th className="px-6 py-4" >{step.name}</th>
+                <td className="px-6 py-4" >{step.categories.map((category) =>category+", ")}</td>
+                <td className="px-6 py-4" >{step.updatedAt&&format(Date.parse(step.updatedAt), 'MM/dd/yyyy HH:mm')}</td>
+                <td className="px-6 py-4" >
+                  <button type="button" className="block rounded-md bg-indigo-600 px-3.5 py-2.5 text-center text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
                     onClick={() => { setModal({ view: "InviteNewMaker", data: step }) }}>Edit</button>
-                  <a type="button" href={`/adminDetails/maker${step.id}`} className="btn btn-outline-dark">Details</a>
+                  
                 </td>
               </tr>
             </>
@@ -82,7 +87,7 @@ export default function Admin() {
         <Pagination />
 
       </div>
-      {modal.view == "InviteNewMaker" && <NewTopic setModal={setModal} modal={modal} />}
+      {modal.view == "NewTopic" && <NewTopic setModal={setModal} modal={modal} />}
       {modal.view == "deleteConfirm" && <DeleteConfirm modal={{  id: modal.data.id, message: modal.data.name, type: "maker" }} />}
     </div>
   )

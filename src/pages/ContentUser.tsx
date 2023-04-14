@@ -17,7 +17,7 @@ export default function Admin() {
   let [searchParams, setSearchParams] = useSearchParams()
 
   const [modal, setModal] = useState({ view: "", data: Initialcontent })
-  const [makerList, setMakerList] = useState({ data: [Initialcontent], total: 0 })
+  const [contentList, setContentList] = useState({ data: [Initialcontent], total: 0 })
   const [loading, setLoading] = useState(true)
 
   let params = { page: "1" }
@@ -27,12 +27,12 @@ export default function Admin() {
 
   useEffect(() => {
     if (typeUser != 'admin') {
-      navigate('/')
+      // navigate('/')
     }
 
     (async () => {
-      const responseAllMaker = await filterByAllContent({ ...params, invitation: false, pagination })
-      setMakerList(responseAllMaker.message)
+      const responseAllMaker = await filterByAllContent({ ...params, pagination })
+      setContentList(responseAllMaker.message)
       setLoading(false)
     })()
 
@@ -43,13 +43,14 @@ export default function Admin() {
     <div>
       <Header />
       <div className="p-4">
-        <div className='d-flex justify-content-between '>
-          <h4>Makers</h4>
+        <div className='flex justify-between my-6'>
+          <h4 className='font-semibold text-[1.2rem]'>Update info clients</h4>
           <button type="button" onClick={() => { setModal({ view: "InviteNewMaker", data: Initialcontent }) }}
-            className="btn btn-primary">Create New Post</button>
+            className="block rounded-md bg-indigo-600 px-3.5 py-2.5 text-center text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600" >
+              Create New Post</button>
         </div>
 
-        {makerList.data.map(data =>
+        {contentList.data.map(data =>
           <a href={data.url} className="group relative inline-block overflow-hidden" style={{ width: "350", height: "350" }}>
             <img src={data.urlImage} width="350" height="350" />
             <button type="button" className="btn btn-outline-secondary mx-3"

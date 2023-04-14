@@ -17,7 +17,7 @@ export default function Admin() {
   let [searchParams, setSearchParams] = useSearchParams()
 
   const [modal, setModal] = useState({ view: "admin", data: Initialuser })
-  const [makerList, setMakerList] = useState({ data: [Initialuser], total: 0 })
+  const [userList, setUserList] = useState({ data: [Initialuser], total: 0 })
   const [loading, setLoading] = useState(true)
 
   let params = { page: "1" }
@@ -27,12 +27,14 @@ export default function Admin() {
 
   useEffect(() => {
     if (typeUser != 'admin') {
-      navigate('/')
+      // navigate('/')
     }
 
     (async () => {
-      const responseAllMaker = await filterByAllUser({ ...params, invitation: false, pagination })
-      setMakerList(responseAllMaker.message)
+      const responseAllUser = await filterByAllUser({ ...params, pagination })
+      setUserList(responseAllUser.message)
+      console.log('responseAllUser.message', responseAllUser.message.data);
+      
       setLoading(false)
     })()
 
@@ -43,35 +45,40 @@ export default function Admin() {
     <div>
       <Header />
       <div className="p-4">
-        <div className='d-flex justify-content-between '>
-          <h4>Makers</h4>
-          <button type="button" onClick={() => { setModal({ view: "InviteNewMaker", data: Initialuser }) }}
-            className="btn btn-primary">Invite Maker</button>
+        <div className='flex justify-between '>
+          <h4>Usuarios</h4>
+          <button type="button" onClick={() => { setModal({ view: "NewUser", data: Initialuser }) }}
+            className="block rounded-md bg-indigo-600 px-3.5 py-2.5 text-center text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">
+              New User</button>
         </div>
-
+        
+        
         <FilterMaker typeOfFilter="filterMaker" loading={loading} setLoading={setLoading} />
 
-        <table className="table border">
-          <thead className="thead-light">
+        <table className="w-full text-sm text-left text-gray-500 dark:text-gray-400 mb-4">
+          <thead className='text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400'>
             <tr>
-              <th scope="col">ID</th>
-              <th scope="col">Email</th>
-              <th scope="col">Type</th>
-              <th scope="col">Total Post</th>
-              {makerList.total && <th scope="col">{pagination * parseInt(params.page)} of {makerList.total}</th>}
+              <th scope="col" className="px-6 py-3">ID</th>
+              <th scope="col" className="px-6 py-3">Email</th>
+              <th scope="col" className="px-6 py-3">Type</th>
+              <th scope="col" className="px-6 py-3">Total Post</th>
+              <th scope="col" className="px-6 py-3">Update</th>
+              {userList.total && <th scope="col">{pagination * parseInt(params.page)} of {userList.total}</th>}
             </tr>
           </thead>
           <tbody>
-            {makerList.data.map(step => <>
-              <tr>
-                <th>{step.id}</th>
-                <div>{step.email}</div>
-                <td>{step.contents.length}</td>
-                <td>{step.updatedAt&&format(Date.parse(step.updatedAt), 'MM/dd/yyyy HH:mm')}</td>
-                <td>
-                  <button type="button" className="btn btn-outline-secondary mx-3"
-                    onClick={() => { setModal({ view: "InviteNewMaker", data: step }) }}>Edit</button>
-                  <a type="button" href={`/adminDetails/maker${step.id}`} className="btn btn-outline-dark">Details</a>
+            {userList.data.map(step => <>
+              <tr className="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
+                <th scope="row" className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                  {step.id}</th>
+                <td className="px-6 py-4" >{step.email}</td>
+                <td className="px-6 py-4" >{step.type}</td>
+                <td className="px-6 py-4" >{step.contents.length}</td>
+                <td className="px-6 py-4" >{step.updatedAt&&format(Date.parse(step.updatedAt), 'MM/dd/yyyy HH:mm')}</td>
+                <td className="px-6 py-4">
+                <button type="button" className="block rounded-md bg-indigo-600 px-3.5 py-2.5 text-center text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600" 
+                    onClick={() => { setModal({ view: "NewUser", data: step }) }}>Edit</button>
+                  
                 </td>
               </tr>
             </>
@@ -82,7 +89,7 @@ export default function Admin() {
         <Pagination />
 
       </div>
-      {modal.view == "InviteNewMaker" && <NewUser setModal={setModal} modal={modal} />}
+      {modal.view == "NewUser" && <NewUser setModal={setModal} modal={modal} />}
       {modal.view == "deleteConfirm" && <DeleteConfirm modal={{  id: modal.data.id, message: modal.data.email, type: "maker" }} />}
     </div>
   )

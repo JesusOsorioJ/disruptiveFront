@@ -35,41 +35,46 @@ const InviteNewMaker: React.FC<Props> = ({ modal, setModal }) => {
     }
   }
   return (
-    <div className="position-fixed w-100 top-0 start-0 border mw-75 ">
-      <div className="position-fixed w-100 top-0 bg-secondary bg-opacity-25 w-100 h-100"></div>
+    <div className="fixed w-full top-0 start-0 mw-75 ">
+      <div className="fixed w-full h-full top-0 bg-gray-600 opacity-25 "></div>
 
-      <div className="position-fixed top-0 w-100 h-100 d-flex justify-content-center align-items-center ">
-        <form className="bg-white border border-2 border-secondary" onSubmit={handlerOnSubmit}>
-          <h4 className="border-bottom p-3 ">
+      <div className="fixed top-0 w-full h-full flex justify-center items-center ">
+        <form className="bg-white border-2 border-gray-400 min-w-[500px]" onSubmit={handlerOnSubmit}>
+          <h4 className="border-b p-3 text-[1.5rem] font-semibold ">
             {Object.keys(modal.data).length == 0 ? 'Invite' : 'Update'} New Maker</h4>
           <div className="px-4 pb-4">
             {loading[1].toString().length > 0 ? <p className='text-danger'>{loading[1]}</p> :
               <p className='text-white'>espacio mensaje</p>}
-            <div className="form-group">
-              <label htmlFor="FirstName">Full Name</label>
-              <input onChange={handlerOnChange} type="text" className="form-control"
-                id="name" placeholder="" value={form.email} required />
-            </div>
-            <div className="form-group">
+              <select onChange={handlerOnChange}
+                                    id="type"
+                                    value={form.type}
+                                    autoComplete="country-name"
+                                    className="block w-full rounded-md border-0 py-3 my-6 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:max-w-xs sm:text-sm sm:leading-6"
+                                >
+                                    <option value="CREATOR">CREATOR</option>
+                                    <option value="READER">READER</option>
+              </select>
+            <div>
               <label htmlFor="Email" >Email</label>
-              <input onChange={handlerOnChange} type="email" className="form-control"
-                id="email" placeholder="" value={form.email} required />
+              <input onChange={handlerOnChange} type="email" id="email" placeholder="" value={form.email} required
+               className="block w-full rounded-md border-0 px-3.5 py-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                 />
             </div>
-            <div className="form-group">
+            <div>
               <label htmlFor="password" >Password</label>
-              <input onChange={handlerOnChange} type="password" className="form-control"
-                id="password" placeholder="" value={form.password} required />
+              <input onChange={handlerOnChange} type="text" id="password" placeholder="" value={form.password} required
+              className="block w-full rounded-md border-0 px-3.5 py-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"/>
             </div>
 
           </div>
-          <div className='d-flex justify-content-between align-items-center border-top p-3'>
-            <button type="button" className="btn btn-danger"
+          <div className='flex justify-between items-center border-t p-3'>
+            <button type="button" className="block rounded-md bg-indigo-600 px-3.5 py-2.5 text-center text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
               onClick={() => { setModal({ view: "deleteConfirm", data: modal.data }) }}>Delete</button>
 
-            <div className="d-flex  gap-4  ">
-              <button type="button" className="btn btn-secondary"
+            <div className="flex  gap-4  ">
+              <button type="button" className="block rounded-md bg-indigo-600 px-3.5 py-2.5 text-center text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
                 onClick={() => window.location.replace('')}>Cancel</button>
-              <button type="submit" className="btn btn-success">
+              <button type="submit" className="block rounded-md bg-indigo-600 px-3.5 py-2.5 text-center text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">
                 {loading[0] == true && <div className="spinner-border spinner-border-sm text-light" role="status"></div>}
                 Acept</button>
             </div>
