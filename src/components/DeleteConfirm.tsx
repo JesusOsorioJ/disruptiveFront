@@ -1,5 +1,7 @@
-import { deleteOneMaker } from "../services/user"
-import { deleteOneApplication } from "../services/application"
+import { deleteOneContent } from "../services/content"
+import { deleteOneTopic } from "../services/topic"
+import { deleteOneUser } from "../services/user"
+
 import { useState } from "react"
 
 type Props = {
@@ -16,12 +18,11 @@ const DeleteConfirm: React.FC<Props> = ({ modal }) => {
   const handlerOnDelete = async () => {
     setMessage([true, "Eliminando"])
 
-    if (modal.type == "maker") {
-      await deleteOneMaker(modal.id)
-    }
-    if (modal.type == "application") {
-      await deleteOneApplication(modal.id)
-    }
+    if (modal.type == "user") { await deleteOneUser(modal.id)}
+    if (modal.type == "topic") { await deleteOneTopic(modal.id) }
+    if (modal.type == "content") { await deleteOneContent(modal.id) }
+
+    
     window.location.replace('')
   }
 
@@ -42,7 +43,10 @@ const DeleteConfirm: React.FC<Props> = ({ modal }) => {
           <div className="p-4">
 
             <p className="text-justify">¿Esta seguro desea eliminar
-              {modal.type == "maker" ? " maker con email " : " Aplicacion en "} {"< "}{modal.message}{" >"} ?</p>
+              {modal.type == "user" && " usuario con email "} 
+              {modal.type == "topic" && " usuario con email "} 
+              {modal.type == "content" && " usuario con email "} 
+              {"< "}{modal.message}{" >"} ?</p>
 
           </div>
           <div className="d-flex flex-row-reverse gap-4 border-top p-3">

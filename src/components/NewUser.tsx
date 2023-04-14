@@ -1,19 +1,16 @@
 import { useState } from 'react'
-import { createOneMaker, updateOneMaker } from '../../services/user'
-import { makerType, Initialmaker} from '../../types'
-
-
+import { createOneUser, updateOneUser } from '../services/user'
+import { userType } from '../types'
 
 type Props = {
-  modal: { view: string, data: makerType }
-  setModal: React.Dispatch<React.SetStateAction<{ view: string, data: makerType }>>
+  modal: { view: string, data: userType }
+  setModal: React.Dispatch<React.SetStateAction<{ view: string, data: userType }>>
 }
 
 const InviteNewMaker: React.FC<Props> = ({ modal, setModal }) => {
 
-
   const status = ['GRACE_PERIOD', 'STUDYING', 'SEARCHING', 'UNEMPLOYED', 'EMPLOYED']
-  
+
   const [form, setForm] = useState( modal.data )
   const [loading, setLoading] = useState([false, ""])
 
@@ -26,9 +23,9 @@ const InviteNewMaker: React.FC<Props> = ({ modal, setModal }) => {
     setLoading([true, ""])
     let response
     if (Object.keys(modal.data.email).length == 0) {
-      response = await createOneMaker(form)
+      response = await createOneUser(form)
     } else {
-      response = await updateOneMaker(form)
+      response = await updateOneUser(form)
     }
 
     if (response.message.code == "P2002") {
@@ -51,7 +48,7 @@ const InviteNewMaker: React.FC<Props> = ({ modal, setModal }) => {
             <div className="form-group">
               <label htmlFor="FirstName">Full Name</label>
               <input onChange={handlerOnChange} type="text" className="form-control"
-                id="name" placeholder="" value={form.name} required />
+                id="name" placeholder="" value={form.email} required />
             </div>
             <div className="form-group">
               <label htmlFor="Email" >Email</label>
@@ -62,19 +59,6 @@ const InviteNewMaker: React.FC<Props> = ({ modal, setModal }) => {
               <label htmlFor="password" >Password</label>
               <input onChange={handlerOnChange} type="password" className="form-control"
                 id="password" placeholder="" value={form.password} required />
-            </div>
-            <div className="d-flex gap-3">
-              <div className="form-group">
-                <label htmlFor="topCohort">Cohort (Top)</label>
-                <input onChange={handlerOnChange} type="text" className="form-control"
-                  id="topCohort" placeholder="" value={form.topCohort} required />
-              </div>
-              <div className="form-group d-flex flex-column ">
-                <label htmlFor="Description">Status</label>
-                <select id="status" onChange={handlerOnChange} value={form.status} name="select" className="form-select">
-                  {status.map((step) => <option value={step} key={step}>{step}</option>)}
-                </select>
-              </div>
             </div>
 
           </div>

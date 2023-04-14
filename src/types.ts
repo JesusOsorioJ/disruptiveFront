@@ -1,66 +1,58 @@
-export interface makerType {
+export interface userType {
     id: number;
+    type: string;
     email: string;
-    name: string;
-    typeUser: string;
     password: string;
-    status: string;
-    topCohort: string;
-    createdAt: string; 
     updatedAt: string;
-    applications: applicationType[]
+    contents: contentType[];
 }
-export interface applicationType {
+export interface topicType {
     id: number;
-    company: string;
-    role: string;
-    description: string
-    url: string
-    status: string;
-    createdAt: string;
-    updatedAt: string
-    applicationLogs: applicationLogType[]
+    name: string;
+    urlImage: string;
+    updatedAt: string;
+    categories: string[];
+    contents: contentType[];
 }
-
-export interface applicationLogType {
+export interface contentType {
     id: number,
-    type:string,
-    fromStatus: string;
-    toStatus: string;
-    message: string;
-    createdAt: string;
+    name: string;
+    description: string;
+    urlImage: string;
+    url: string;
+    updatedAt: string;
+    category: string;
 }
 
-export const InitialapplicationLog = {
+export const Initialcontent = {
     id: 0,
-    type:"",
-    fromStatus: "",
-    toStatus: "",
-    message: "",
-    createdAt: "",
-}
-export const Initialapplication = {
-    id: 0,
-    company: "",
-    role: "",
-    description: "",
-    url: "",
-    status: "",
-    createdAt: "",
-    updatedAt: "",
-    applicationLogs:[InitialapplicationLog]
-}
-export const Initialmaker = {
-    id: 0,
-    email: "",
     name: "",
-    typeUser: "",
-    password: "",
-    status: "GRACE_PERIOD",
-    topCohort: "",
-    createdAt: "",
+    description: "",
+    urlImage: "",
+    url: "",
     updatedAt: "",
-    applications: [Initialapplication]
+    category: "",
 }
+
+export const Initialuser = {
+    id: 0,
+    type: "READER",
+    email: "",
+    password: "",
+    updatedAt: "",
+    contents: [Initialcontent]
+}
+
+export const Initialtopic = {
+    id: 0,
+    name: "",
+    urlImage: "",
+    updatedAt: "",
+    categories: ['VIDEO','IMAGE','TEXT'],
+    contents: [Initialcontent]
+}
+
+
+
 
 
