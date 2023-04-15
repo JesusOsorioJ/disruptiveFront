@@ -1,13 +1,13 @@
 # Disruptive Frontend
 ## Introduction
-Proyecto prueba tecnica disruptive studio tecnologias usadas para creacion de frontend vite.js con typescript, estilos y animaciones tailwind 🙌
+Proyecto prueba tecnica disruptive studio. Tecnologias usadas para creacion de frontend vite.js con typescript, estilos y animaciones tailwind 🙌
 
 Este pagina consta de tres usuarios, admin, reader y creator que podran gestionar la info de la pagina segun los permisos que se concedan.
 
-🔎 Aqui enumerado las funciones de cada usuario
-💬 El Admin podra crear, eliminar y modificar todas las tablas ( usuarios, topics y content)
-📋 Creator solo podra crear, modificar y eliminar contenido creado por el mismo
-🗓️ Reader solo podra leer el contenido
+🔎 Aqui enumerado las funciones de cada usuario:
+-💬 El Admin podra crear, eliminar y modificar todas las tablas ( usuarios, topics y content)
+-📋 Creator solo podra crear, modificar y eliminar contenido creado por el mismo
+-🗓️ Reader solo podra leer el contenido
 
 
 ## Information
