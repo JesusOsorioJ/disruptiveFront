@@ -6,9 +6,8 @@ Este pagina consta de tres usuarios, admin, reader y creator que podran gestiona
 
 🔎 Aqui enumerado las funciones de cada usuario
 💬 El Admin podra crear, eliminar y modificar todas las tablas que consta de tres ( usuarios, topics y content)
-📋 Creator son podra crear, modficar y elimnar contenido creado por el mismo
+📋 Creator son podra crear, modificar y eliminar contenido creado por el mismo
 🗓️ Reader solo podra leer el contenido
- set the best date for you
 
 
 ## Information
