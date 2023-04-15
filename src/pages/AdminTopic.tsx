@@ -26,7 +26,7 @@ export default function Admin() {
   const { typeUser, pagination } = myObject
 
   useEffect(() => {
-    if (typeUser != 'admin') {
+    if (typeUser != 'ADMIN') {
       navigate('/login')
 
     }

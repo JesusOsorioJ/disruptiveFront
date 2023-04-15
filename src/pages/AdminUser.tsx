@@ -26,15 +26,13 @@ export default function Admin() {
   const { typeUser, pagination } = myObject
 
   useEffect(() => {
-    if (typeUser != 'admin') {
+    if (typeUser != 'ADMIN') {
       navigate('/login')
     }
 
     (async () => {
       const responseAllUser = await filterByAllUser({ ...params, pagination })
-      setUserList(responseAllUser.message)
-      console.log('responseAllUser.message', responseAllUser.message.data);
-      
+      setUserList(responseAllUser.message)      
       setLoading(false)
     })()
 

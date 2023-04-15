@@ -2,7 +2,6 @@
 export default function Header() {
     const myObject = JSON.parse(window.sessionStorage.getItem("myObject") || '{"typeUser":""}')
     const { email, typeUser } = myObject
-    console.log("typeUser", typeUser);
 
     const handlerLogout = () => {
         window.sessionStorage.setItem("myObject", "");
@@ -36,16 +35,16 @@ export default function Header() {
                     </div>
                     <div className="flex  justify-between items-center " id="mobile-menu-2">
                         <ul className="flex font-medium flex-row space-x-8 ">
-                            {typeUser == undefined && <li>
+                            {typeUser == 'ADMIN' && <li>
                                 <a href="/admintopic" className="text-gray-800  hover:bg-gray-50 focus:ring-4 focus:ring-gray-300 font-medium px-3 py-4 mr-2 dark:hover:bg-gray-700 focus:outline-none dark:focus:ring-gray-800">Admin_Topic</a>
                             </li>}
-                            {typeUser == undefined && <li>
+                            {typeUser == 'ADMIN' && <li>
                                 <a href="/adminuser" className="text-gray-800  hover:bg-gray-50 focus:ring-4 focus:ring-gray-300 font-medium px-3 py-4 mr-2 dark:hover:bg-gray-700 focus:outline-none dark:focus:ring-gray-800">Admin_User</a>
                             </li>}
-                            {typeUser == undefined && <li>
+                            <li>
                                 <a href="/" className="text-gray-800  hover:bg-gray-50 focus:ring-4 focus:ring-gray-300 font-medium px-3 py-4 mr-2 dark:hover:bg-gray-700 focus:outline-none dark:focus:ring-gray-800">Home</a>
-                            </li>}
-                            {typeUser == undefined && <li>
+                            </li>
+                            {typeUser == 'CREATOR' && <li>
                                 <a href="/home/details"  className="hover:bg-gray-50 focus:ring-4 focus:ring-gray-300 font-medium px-3 py-4 mr-2 dark:hover:bg-gray-700 focus:outline-none dark:focus:ring-gray-800">User_Details</a>
                             </li>}
 

@@ -5,7 +5,6 @@ export async function filterByAllContent(body: {}) {
     try {
         const response = await fetch(`${API_URL}/content/filterbycontent?` +
             new URLSearchParams(body).toString())
-            console.log("body",body);
         const data = await response.json();
         return data;
     } catch (error: any) {

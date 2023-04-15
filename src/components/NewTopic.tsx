@@ -35,7 +35,6 @@ const NewTopic: React.FC<Props> = ({ modal, setModal }) => {
 
   const ClickCategory = (e: any) => {
     const { value } = e.target
-    console.log(value);
     if (value == 'TEXT') { setcat([!cat[0], cat[1], cat[2]]) }
     if (value == 'IMAGE') { setcat([cat[0], !cat[1], cat[2]]) }
     if (value == 'VIDEO') { setcat([cat[0], cat[1], !cat[2]]) }
@@ -49,7 +48,6 @@ const NewTopic: React.FC<Props> = ({ modal, setModal }) => {
     let vec = []
     for (let i in cat) { if (cat[i]){ vec.push(initialCat[i])} }
     let response
-    console.log("vec",vec);
     
     if (Object.keys(modal.data.name).length == 0) {
       
@@ -61,7 +59,7 @@ const NewTopic: React.FC<Props> = ({ modal, setModal }) => {
       }
 
     if (response.message.code == "P2002") {
-      setLoading([false, "Email existente, intente nuevamente"])
+      setLoading([false, "Topic existente, intente nuevamente"])
     } else {
       window.location.replace('')
     }
@@ -73,9 +71,9 @@ const NewTopic: React.FC<Props> = ({ modal, setModal }) => {
       <div className="fixed top-0 w-full h-full flex justify-center items-center ">
         <form className="bg-white border-2 border-gray-400 min-w-[500px]" onSubmit={handlerOnSubmit}>
           <h4 className="border-b p-3 text-[1.5rem] font-semibold ">
-            {Object.keys(modal.data).length == 0 ? 'Create New ' : 'Update '} User</h4>
+            {Object.keys(modal.data.name).length == 0 ? 'Create New ' : 'Update '} Topic</h4>
           <div className="px-4 pb-4">
-            {loading[1].toString().length > 0 ? <p className='text-danger'>{loading[1]}</p> :
+            {loading[1].toString().length > 0 ? <p className=' text-red-400 text-sm text-center'>{loading[1]}</p> :
               <p className='text-white'>espacio mensaje</p>}
             {/* {Initialtopic} */}
             <div className='mb-6'>

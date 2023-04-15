@@ -40,9 +40,9 @@ const NewUser: React.FC<Props> = ({ modal, setModal }) => {
       <div className="fixed top-0 w-full h-full flex justify-center items-center ">
         <form className="bg-white border-2 border-gray-400 min-w-[500px]" onSubmit={handlerOnSubmit}>
           <h4 className="border-b p-3 text-[1.5rem] font-semibold ">
-            {Object.keys(modal.data).length == 0 ? 'Invite' : 'Update'} User</h4>
+            {Object.keys(modal.data.email).length == 0 ? 'Create new  user' : 'Update  user'}</h4>
           <div className="px-4 pb-4">
-            {loading[1].toString().length > 0 ? <p className='text-danger'>{loading[1]}</p> :
+            {loading[1].toString().length > 0 ? <p className=' text-red-400 text-sm text-center'>{loading[1]}</p> :
               <p className='text-white'>espacio mensaje</p>}
             <select onChange={handlerOnChange}
               id="type"

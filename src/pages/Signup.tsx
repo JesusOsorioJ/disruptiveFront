@@ -11,7 +11,7 @@ export default function Login() {
     const [form, setForm] = useState({ type: "CREATOR" })
     const [loading, setLoading] = useState(false)
     const [message, setMessage] = useState("")
-    const [ getfirstTopic, setGetfirstTopic] = useState(Initialtopic)
+    const [getfirstTopic, setGetfirstTopic] = useState(Initialtopic)
     const [typeUser, setTypeUser] = useState("")
 
     const handlerChange = (e: any) => {
@@ -23,28 +23,25 @@ export default function Login() {
         (async () => {
             const responseAllTopic = await getAllTopic({})
             setGetfirstTopic(responseAllTopic.message.data[0])
-
-          })()
+        })()
         const myObject = JSON.parse(window.sessionStorage.getItem("myObject") || '{"typeUser":""}')
         if (myObject.typeUser == 'ADMIN') { navigate('/adminuser') }
-        if (myObject.typeUser == 'CREATOR'|| myObject.typeUser == 'READER') { navigate('/home') }
-
+        if (myObject.typeUser == 'CREATOR' || myObject.typeUser == 'READER') { navigate('/home') }
     }, [typeUser])
 
     const handlerSubmit = async (e: any) => {
         e.preventDefault()
         setLoading(true)
-
         const response = await createOneUser(form)
 
-
-        if (response.message.length > 0) {
-            const { id, typeUser, email } = response.message[0]
-            const myObject = { id, typeUser, email, pagination: 4,  }
+        if (response.message.code != "P2002") {
+            const { id, type, email } = response.message
+            const myObject = { id, typeUser: type, email, pagination: 4, topicName: getfirstTopic }
             window.sessionStorage.setItem("myObject", JSON.stringify(myObject));
             setTypeUser(typeUser)
+            window.location.replace('')
         } else {
-            setMessage('Ha ocurrido un error ,intentelo nuevamente')
+            setMessage('Email existente, intente nuevamente')
             setLoading(false)
         }
     }
@@ -69,7 +66,7 @@ export default function Login() {
                                 Login into your account  in this link
                             </a>
                         </p>
-                        {message.length > 0 ? <p className=" text-danger text-center">{message}</p >
+                        {message.length > 0 ? <p className=" text-red-400 text-sm text-center">{message}</p >
                             : <p className='text-white'> espacio error</p>}
                     </div>
                     <form onSubmit={handlerSubmit}>
@@ -102,7 +99,7 @@ export default function Login() {
                         {/* Password input  */}
                         <div className="sm:col-span-2">
                             <label htmlFor="Password" className="block text-sm font-semibold leading-6 text-gray-900">
-                            Password
+                                Password
                             </label>
                             <div className="mb-6">
                                 <input onChange={handlerChange}
@@ -119,7 +116,7 @@ export default function Login() {
                             className="group relative flex w-full justify-center rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
                         >
                             <span className="absolute inset-y-0 left-0 flex items-center pl-3">
-                                {loading == true && <LoadingSmall/>}
+                                {loading == true && <LoadingSmall />}
                             </span>
                             Create
                         </button>

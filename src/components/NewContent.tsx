@@ -19,9 +19,6 @@ const NewContent: React.FC<Props> = ({ modal, setModal }) => {
   const myObject = JSON.parse(window.sessionStorage.getItem("myObject") || '{"typeUser":""}')
   const { id } = myObject
 
-
-
-
   const handlerOnChange = (e: any) => {
     const { id, value } = e.target
     setForm({ ...form, content: { ...form.content, [id]: value } })
@@ -29,22 +26,15 @@ const NewContent: React.FC<Props> = ({ modal, setModal }) => {
   const handlerOnSubmit = async (e: any) => {
     e.preventDefault()
     setLoading([true, ""])
-    let response
-    if (Object.keys(modal.data.content.name).length == 0) {
-      console.log("pase por create");
-      
-      response = await createOneContent({ ...form.content, userId: id, category: categorySelect, topicName: form.topic.name })
-    } else {
-      console.log("pase por update");
-      response = await updateOneContent({ ...form.content, category: categorySelect, topicName: form.topic.name })
-    }
 
-    if (response.message.code == "P2002") {
-      setLoading([false, "Email existente, intente nuevamente"])
+    if (Object.keys(modal.data.content.name).length == 0) {
+      await createOneContent({ ...form.content, userId: id, category: categorySelect, topicName: form.topic.name })
     } else {
-      window.location.replace('')
+      await updateOneContent({ ...form.content, category: categorySelect, topicName: form.topic.name })
     }
+    window.location.replace('')
   }
+
   return (
     <div className="fixed w-full top-0 start-0 mw-75 ">
       <div className="fixed w-full h-full top-0 bg-gray-600 opacity-25 "></div>
@@ -54,7 +44,7 @@ const NewContent: React.FC<Props> = ({ modal, setModal }) => {
           <div className='border-b p-3 flex justify-between items-center'>
             <h4 className="border-b p-3 text-[1.5rem] font-semibold ">
 
-              {Object.keys(modal.data.content.name).length == 0 ? 'Create New ' : 'Update '} {" " + form.topic.name}</h4>
+              {Object.keys(modal.data.content.name).length == 0 ? 'Create New ' : 'Update '} {"< " + form.topic.name + " >"}</h4>
             <select id="status" onChange={(e) => setCategorySelect(e.target.value)} value={categorySelect} name="select"
               className="block w-20 rounded-md border-0 py-3 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:max-w-xs sm:text-sm sm:leading-6">
               {form.topic.categories.map((step) => <option value={step} key={step}>{step}</option>)}
@@ -63,7 +53,7 @@ const NewContent: React.FC<Props> = ({ modal, setModal }) => {
           </div>
 
           <div className="px-4 pb-4">
-            {loading[1].toString().length > 0 ? <p className='text-danger'>{loading[1]}</p> :
+            {loading[1].toString().length > 0 ? <p className=' text-red-400 text-sm text-center'>{loading[1]}</p> :
               <p className='text-white'>espacio mensaje</p>}
             <div className="form-group">
               <label htmlFor="FirstName">Name</label>
@@ -96,8 +86,8 @@ const NewContent: React.FC<Props> = ({ modal, setModal }) => {
               <button type="button" className="block rounded-md bg-gray-600 px-3.5 py-2.5 text-center text-sm font-semibold text-white shadow-sm hover:bg-gray-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gray-600"
                 onClick={() => window.location.replace('')}>Cancel</button>
               <button type="submit" className="block rounded-md bg-emerald-400 px-3.5 py-2.5 text-center text-sm font-semibold text-white shadow-sm hover:bg-emerald-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-emerald-600">
-                {loading[0] == true && <LoadingSmall/>}
-                Crear</button>
+                {loading[0] == true && <LoadingSmall />}
+                Aceptar</button>
             </div>
           </div>
         </form>
