@@ -11,6 +11,7 @@ import Pagination from '../components/Pagination'
 import DeleteConfirm from '../components/DeleteConfirm'
 
 import { Initialcontent, Initialtopic } from '../types'
+import { LoadingBig } from '../components/Loading'
 
 export default function Admin() {
   const navigate = useNavigate();
@@ -32,8 +33,8 @@ export default function Admin() {
   
 
   useEffect(() => {
-    if (typeUser != 'admin') {
-      // navigate('/home')
+    if (typeUser == undefined) {
+      navigate('/login')
     }
 
     (async () => {
@@ -72,7 +73,8 @@ export default function Admin() {
           <div className='flex justify-between items-center' >
             <div className='flex items-center'>
               <h4 className="text-[2rem px-5 uppercase font-semibold">My contributions</h4>
-              <h6 className="text-[1.2rem]">Total: {contentList.total}</h6>
+              <h6 className="text-[1.2rem] px-6">Total: {contentList.total}</h6>
+              {loading == true && <LoadingBig/>}
             </div>
             <h4 className="text-[2rem] text-white px-5 uppercase font-semibold">{topicName.name}</h4>
             <button type="button" onClick={() => { setModal({ view: "NewContent", data: { content: Initialcontent, topic: topicName } }) }}
@@ -87,11 +89,12 @@ export default function Admin() {
           {contentList.data.map(data =>
             <div className=" group  relative inline-block overflow-hidden" style={{ width: "100%", height: "350px" }}>
               <img src={data.urlImage} style={{ width: "100%", height: "350px" }} />
-              {page != 'details' && <a href={data.url} className="absolute top-2 right-20 block rounded-md bg-cyan-900 px-3.5 py-2.5 text-center text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600" >
+              
+              {typeUser=='admin'&&<button type="button" className=" absolute top-2 right-20 block rounded-md bg-cyan-900 px-3.5 py-2.5 text-center text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+                onClick={() => { setModal({ view: "NewContent", data: { content: data, topic: topicName } }) }}>Edit</button>}
+              {page != 'details' && <a href={data.url} className="absolute top-2 right-2 block rounded-md bg-cyan-900 px-3.5 py-2.5 text-center text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600" >
                 Link
               </a>}
-              <button type="button" className=" absolute top-2 right-2 block rounded-md bg-cyan-900 px-3.5 py-2.5 text-center text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
-                onClick={() => { setModal({ view: "NewContent", data: { content: data, topic: topicName } }) }}>Edit</button>
               <div className="w-full  h-[180px] absolute bottom-0 left-0 flex flex-col flex-wrap bg-black opacity-80 translate-y-[133px] duration-700 group-hover:translate-y-0">
 
                 <div className="p-4 w-full">

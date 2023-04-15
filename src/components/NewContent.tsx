@@ -67,22 +67,22 @@ const NewContent: React.FC<Props> = ({ modal, setModal }) => {
               <p className='text-white'>espacio mensaje</p>}
             <div className="form-group">
               <label htmlFor="FirstName">Name</label>
-              <input onChange={handlerOnChange} type="text" id="name" placeholder=""
+              <input onChange={handlerOnChange} type="text" id="name" placeholder="Input a name"
                 value={form.content.name} required className="block w-full rounded-md border-0 px-3.5 py-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6" />
             </div>
             <div className="form-group">
               <label htmlFor="Email" >Description</label>
-              <textarea onChange={handlerOnChange} id="description" placeholder=""
+              <textarea onChange={handlerOnChange} id="description" placeholder="Input a description"
                 value={form.content.description} required className="block w-full rounded-md border-0 px-3.5 py-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6" />
             </div>
             <div className="form-group">
               <label htmlFor="password" >URL Image</label>
-              <input onChange={handlerOnChange} type="text" id="urlImage" placeholder=""
+              <input onChange={handlerOnChange} type="text" id="urlImage" placeholder="Input a url Image"
                 value={form.content.urlImage} required className="block w-full rounded-md border-0 px-3.5 py-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6" />
             </div>
             <div className="form-group">
               <label htmlFor="password" >URL Link</label>
-              <input onChange={handlerOnChange} type="text" id="url" placeholder=""
+              <input onChange={handlerOnChange} type="text" id="url" placeholder="Input a URL"
                 value={form.content.url} required className="block w-full rounded-md border-0 px-3.5 py-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6" />
             </div>
 

@@ -39,8 +39,8 @@ const DeleteConfirm: React.FC<Props> = ({ modal }) => {
 
             <p className="text-justify">¿Esta seguro desea eliminar
               {modal.type == "user" && " usuario con email "} 
-              {modal.type == "topic" && " usuario con email "} 
-              {modal.type == "content" && " usuario con email "} 
+              {modal.type == "topic" && " topic de nombre "} 
+              {modal.type == "content" && " content de nombre "} 
               {"< "}{modal.message}{" >"} ?</p>
 
           </div>

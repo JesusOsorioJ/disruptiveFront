@@ -26,8 +26,8 @@ export default function Login() {
 
           })()
         const myObject = JSON.parse(window.sessionStorage.getItem("myObject") || '{"typeUser":""}')
-        if (myObject.typeUser == 'maker') { navigate('/') }
-        if (myObject.typeUser == 'admin') { navigate('/admin') }
+        if (myObject.typeUser == 'ADMIN') { navigate('/adminuser') }
+        if (myObject.typeUser == 'CREATOR'|| myObject.typeUser == 'READER') { navigate('/home') }
 
     }, [typeUser])
 
@@ -40,7 +40,7 @@ export default function Login() {
 
         if (response.message.length > 0) {
             const { id, typeUser, email } = response.message[0]
-            const myObject = { id, typeUser, email, pagination: 10,  }
+            const myObject = { id, typeUser, email, pagination: 4,  }
             window.sessionStorage.setItem("myObject", JSON.stringify(myObject));
             setTypeUser(typeUser)
         } else {

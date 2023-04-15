@@ -27,7 +27,7 @@ export default function Admin() {
 
   useEffect(() => {
     if (typeUser != 'admin') {
-      // navigate('/')
+      navigate('/login')
     }
 
     (async () => {
