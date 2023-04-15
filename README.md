@@ -17,6 +17,6 @@ Este pagina consta de tres usuarios, admin, reader y creator que podran gestiona
 - [Jesus Osorio](https://github.com/JesusOsorioJ)
 
 ## Usage
-- Install all dependencies with `npm install`
-- create file .env and request the appropriate variables `REACT_APP_API_BASE_URL=http://localhost:8080/api`
-- run `npm run dev` and refer to [localhost:5173](http://localhost:5173/)
+- Correr `npm install` para instalar dependencias de desarrollo
+- Crear y Configurar `.env` con `REACT_APP_API_BASE_URL=http://localhost:8080/api`
+- Correr `npm run dev` con [localhost:5173](http://localhost:5173/)
