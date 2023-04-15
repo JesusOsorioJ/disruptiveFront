@@ -1,31 +1,42 @@
 import { useState } from 'react'
 import { createOneContent, updateOneContent } from '../services/content'
-import { contentType, Initialcontent } from '../types'
+import { contentType, Initialcontent, topicType } from '../types'
+import { LoadingSmall } from './Loading'
 
 type Props = {
-  modal: { view: string, data: contentType }
-  setModal: React.Dispatch<React.SetStateAction<{ view: string, data: contentType }>>
+  modal: { view: string, data: { content: contentType, topic: topicType } },
+  setModal: React.Dispatch<React.SetStateAction<{ view: string, data: { content: contentType, topic: topicType } }>>
 }
 
-const InviteNewMaker: React.FC<Props> = ({ modal, setModal }) => {
+const NewContent: React.FC<Props> = ({ modal, setModal }) => {
 
   const categories = ['VIDEO', 'IMAGE', 'TEXT']
 
   const [form, setForm] = useState(modal.data)
   const [loading, setLoading] = useState([false, ""])
+  const [categorySelect, setCategorySelect] = useState(modal.data.topic.categories[0])
+
+  const myObject = JSON.parse(window.sessionStorage.getItem("myObject") || '{"typeUser":""}')
+  const { id } = myObject
+
+
+
 
   const handlerOnChange = (e: any) => {
     const { id, value } = e.target
-    setForm({ ...form, [id]: value })
+    setForm({ ...form, content: { ...form.content, [id]: value } })
   }
   const handlerOnSubmit = async (e: any) => {
     e.preventDefault()
     setLoading([true, ""])
     let response
-    if (Object.keys(modal.data.name).length == 0) {
-      response = await createOneContent(form)
+    if (Object.keys(modal.data.content.name).length == 0) {
+      console.log("pase por create");
+      
+      response = await createOneContent({ ...form.content, userId: id, category: categorySelect, topicName: form.topic.name })
     } else {
-      response = await updateOneContent(form)
+      console.log("pase por update");
+      response = await updateOneContent({ ...form.content, category: categorySelect, topicName: form.topic.name })
     }
 
     if (response.message.code == "P2002") {
@@ -35,61 +46,58 @@ const InviteNewMaker: React.FC<Props> = ({ modal, setModal }) => {
     }
   }
   return (
-    <div className="fixed w-full top-0 start-0 border mw-75 ">
-      <div className="fixed w-full top-0 bg-secondary bg-opacity-25 w-100 h-100"></div>
+    <div className="fixed w-full top-0 start-0 mw-75 ">
+      <div className="fixed w-full h-full top-0 bg-gray-600 opacity-25 "></div>
 
-      <div className="fixed top-0 w-100 h-100 d-flex justify-content-center align-items-center ">
-        <form className="bg-white border-2 border-secondary" onSubmit={handlerOnSubmit}>
-          <h4 className="border-bottom p-3 ">
-            {Object.keys(modal.data).length == 0 ? 'Invite' : 'Update'} New Maker</h4>
+      <div className="fixed top-0 w-full h-full flex justify-center items-center ">
+        <form className="bg-white border-2 border-gray-400 min-w-[500px]" onSubmit={handlerOnSubmit}>
+          <div className='border-b p-3 flex justify-between items-center'>
+            <h4 className="border-b p-3 text-[1.5rem] font-semibold ">
+
+              {Object.keys(modal.data.content.name).length == 0 ? 'Create New ' : 'Update '} {" " + form.topic.name}</h4>
+            <select id="status" onChange={(e) => setCategorySelect(e.target.value)} value={categorySelect} name="select"
+              className="block w-20 rounded-md border-0 py-3 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:max-w-xs sm:text-sm sm:leading-6">
+              {form.topic.categories.map((step) => <option value={step} key={step}>{step}</option>)}
+            </select>
+
+          </div>
+
           <div className="px-4 pb-4">
             {loading[1].toString().length > 0 ? <p className='text-danger'>{loading[1]}</p> :
               <p className='text-white'>espacio mensaje</p>}
             <div className="form-group">
-              <label htmlFor="FirstName">Full Name</label>
-              <input onChange={handlerOnChange} type="text" className="form-control"
-                id="name" placeholder="" value={form.name} required />
+              <label htmlFor="FirstName">Name</label>
+              <input onChange={handlerOnChange} type="text" id="name" placeholder=""
+                value={form.content.name} required className="block w-full rounded-md border-0 px-3.5 py-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6" />
             </div>
             <div className="form-group">
-              <label htmlFor="Email" >Email</label>
-              <input onChange={handlerOnChange} type="email" className="form-control"
-                id="email" placeholder="" value={form.description} required />
+              <label htmlFor="Email" >Description</label>
+              <textarea onChange={handlerOnChange} id="description" placeholder=""
+                value={form.content.description} required className="block w-full rounded-md border-0 px-3.5 py-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6" />
             </div>
             <div className="form-group">
-              <label htmlFor="password" >Password</label>
-              <input onChange={handlerOnChange} type="password" className="form-control"
-                id="password" placeholder="" value={form.urlImage} required />
+              <label htmlFor="password" >URL Image</label>
+              <input onChange={handlerOnChange} type="text" id="urlImage" placeholder=""
+                value={form.content.urlImage} required className="block w-full rounded-md border-0 px-3.5 py-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6" />
             </div>
             <div className="form-group">
-              <label htmlFor="password" >Password</label>
-              <input onChange={handlerOnChange} type="password" className="form-control"
-                id="password" placeholder="" value={form.url} required />
+              <label htmlFor="password" >URL Link</label>
+              <input onChange={handlerOnChange} type="text" id="url" placeholder=""
+                value={form.content.url} required className="block w-full rounded-md border-0 px-3.5 py-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6" />
             </div>
 
-            <div className="form-group">
-              <label htmlFor="topCohort">Cohort (Top)</label>
-              <input onChange={handlerOnChange} type="text" className="form-control"
-                id="topCohort" placeholder="" value={form.category} required />
-            </div>
-            <div className="form-group d-flex flex-column ">
-              <label htmlFor="Description">Status</label>
-              <select id="status" onChange={handlerOnChange} value={form.category} name="select" className="form-select">
-                {categories.map((step) => <option value={step} key={step}>{step}</option>)}
-              </select>
-            </div>
 
 
           </div>
-          <div className='d-flex justify-content-between align-items-center border-top p-3'>
-            <button type="button" className="btn btn-danger"
+          <div className='flex justify-between items-center border-t p-3'>
+            <button type="button" className="block rounded-md bg-red-400 px-3.5 py-2.5 text-center text-sm font-semibold text-white shadow-sm hover:bg-red-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-600"
               onClick={() => { setModal({ view: "deleteConfirm", data: modal.data }) }}>Delete</button>
-
-            <div className="d-flex  gap-4  ">
-              <button type="button" className="btn btn-secondary"
+            <div className="flex  gap-4  ">
+              <button type="button" className="block rounded-md bg-gray-600 px-3.5 py-2.5 text-center text-sm font-semibold text-white shadow-sm hover:bg-gray-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gray-600"
                 onClick={() => window.location.replace('')}>Cancel</button>
-              <button type="submit" className="btn btn-success">
-                {loading[0] == true && <div className="spinner-border spinner-border-sm text-light" role="status"></div>}
-                Acept</button>
+              <button type="submit" className="block rounded-md bg-emerald-400 px-3.5 py-2.5 text-center text-sm font-semibold text-white shadow-sm hover:bg-emerald-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-emerald-600">
+                {loading[0] == true && <LoadingSmall/>}
+                Crear</button>
             </div>
           </div>
         </form>
@@ -98,4 +106,4 @@ const InviteNewMaker: React.FC<Props> = ({ modal, setModal }) => {
   )
 }
 
-export default InviteNewMaker
+export default NewContent

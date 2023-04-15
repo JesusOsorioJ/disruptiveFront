@@ -5,7 +5,7 @@ import { format } from 'date-fns'
 import { filterByAllUser } from '../services/user'
 
 import Header from '../components/Header'
-import FilterMaker from '../components/FilterMaker'
+import Filter from '../components/Filter'
 import NewUser from '../components/NewUser'
 import Pagination from '../components/Pagination'
 import DeleteConfirm from '../components/DeleteConfirm'
@@ -53,7 +53,7 @@ export default function Admin() {
         </div>
         
         
-        <FilterMaker typeOfFilter="filterMaker" loading={loading} setLoading={setLoading} />
+        <Filter typeOfFilter="filterUser" loading={loading} setLoading={setLoading} />
 
         <table className="w-full text-sm text-left text-gray-500 dark:text-gray-400 mb-4">
           <thead className='text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400'>
@@ -90,7 +90,7 @@ export default function Admin() {
 
       </div>
       {modal.view == "NewUser" && <NewUser setModal={setModal} modal={modal} />}
-      {modal.view == "deleteConfirm" && <DeleteConfirm modal={{  id: modal.data.id, message: modal.data.email, type: "maker" }} />}
+      {modal.view == "deleteConfirm" && <DeleteConfirm modal={{  id: modal.data.id, message: modal.data.email, type: "user" }} />}
     </div>
   )
 }

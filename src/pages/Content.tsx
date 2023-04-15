@@ -1,82 +1,115 @@
-import { useNavigate, useSearchParams } from 'react-router-dom'
+import { useNavigate, useSearchParams, useParams } from 'react-router-dom'
 import { useState, useEffect } from 'react'
-import { format } from 'date-fns'
 
 import { filterByAllContent } from '../services/content'
+import { getAllTopic } from '../services/topic'
 
 import Header from '../components/Header'
-import FilterMaker from '../components/FilterMaker'
+import Filter from '../components/Filter'
 import NewContent from '../components/NewContent'
 import Pagination from '../components/Pagination'
 import DeleteConfirm from '../components/DeleteConfirm'
 
-import { Initialcontent } from '../types'
+import { Initialcontent, Initialtopic } from '../types'
 
 export default function Admin() {
   const navigate = useNavigate();
   let [searchParams, setSearchParams] = useSearchParams()
+  const { page } = useParams()
 
-  const [modal, setModal] = useState({ view: "", data: Initialcontent })
+  const [modal, setModal] = useState({ view: "", data: { content: Initialcontent, topic: Initialtopic } })
   const [contentList, setContentList] = useState({ data: [Initialcontent], total: 0 })
+  const [topicList, setTopicList] = useState([Initialtopic])
+
   const [loading, setLoading] = useState(true)
 
   let params = { page: "1" }
   searchParams.forEach((value, key) => Object.assign(params, { [key]: value }));
   const myObject = JSON.parse(window.sessionStorage.getItem("myObject") || '{"typeUser":""}')
-  const { typeUser, pagination } = myObject
+  const { typeUser, id, pagination } = myObject
+  const topicName= myObject.topicName
+  console.log('topicName',topicName);
+  
 
   useEffect(() => {
     if (typeUser != 'admin') {
-      navigate('/')
+      // navigate('/home')
     }
 
     (async () => {
-      const responseAllMaker = await filterByAllContent({ ...params, pagination })
-      setContentList(responseAllMaker.message)
+      let userId = 0
+      if (page == 'details') { userId = id }
+      const responseAllContent = await filterByAllContent({
+        ...params, userId, pagination, topicName: topicName.name
+      })
+      setContentList(responseAllContent.message)
+      const responseAllTopic = await getAllTopic({})
+      setTopicList(responseAllTopic.message.data)
       setLoading(false)
     })()
 
   }, [loading])
 
   return (
-
     <div>
       <Header />
-      <div >
-        <div className='flex justify-between '>
-          <h4>Makers</h4>
-          <button type="button" onClick={() => { setModal({ view: "InviteNewMaker", data: Initialcontent }) }}
-            className="btn btn-primary">Create New Post</button>
-        </div>
-
-        <FilterMaker typeOfFilter="filterMaker" loading={loading} setLoading={setLoading} />
-
-       <div className='grid grid-cols-4 gap-6 px-12  py-6'>
-       {contentList.data.map(data =>
-          <a href={data.url} className="group relative inline-block overflow-hidden" style={{ width: "350px", height: "350px" }}>
-            <img src={data.urlImage} style={{ width: "350px", height: "350px" }}/>
-            <button type="button" className="btn btn-outline-secondary mx-3"
-              onClick={() => { setModal({ view: "InviteNewMaker", data: data }) }}>Edit</button>
-            <button type="button" className="btn btn-outline-secondary mx-3"
-              onClick={() => { setModal({ view: "InviteNewMaker", data: data }) }}>Edit</button>
-            <div className=" w-[350px] h-[180px] absolute bottom-0 left-0 flex flex-col flex-wrap bg-black opacity-80 translate-y-[133px] duration-700 group-hover:translate-y-0">
-             
-              <div className="p-4 w-[300px]">
-                <p className="text-white text-lg">{data.name}</p>
-                <p className="text-white text-base pb-3">{data.url}</p>
-                <p className="text-white text-sm">{data.description}</p>
+      <div className="p-4" >
+        {page != 'details' ?
+          <div className='flex justify-between items-center object-none' style={{ backgroundImage: `url(${topicName.urlImage})` }}>
+            <div className='flex items-center'>
+              <h4 className="text-[2rem] text-white px-5 uppercase font-semibold">{topicName.name}</h4>
+              <div className='d-flex flex-column align-items-center mx-4'>
+                <h6 className="text-[1.2rem] text-white">Total</h6>
+                <p className="text-white">{pagination * parseInt(params.page)} of {contentList.total}</p>
               </div>
             </div>
-          </a>
-        )}
-       </div>
-       
+            <div className='py-12 px-6'>
+              <button type="button" onClick={() => { setModal({ view: "NewContent", data: { content: Initialcontent, topic: topicName } }) }}
+                className="block rounded-md bg-indigo-600 px-3.5 py-2.5 text-center text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">
+                Create New Post</button>
+            </div>
+          </div> :
+          <div className='flex justify-between items-center' >
+            <div className='flex items-center'>
+              <h4 className="text-[2rem px-5 uppercase font-semibold">My contributions</h4>
+              <h6 className="text-[1.2rem]">Total: {contentList.total}</h6>
+            </div>
+            <h4 className="text-[2rem] text-white px-5 uppercase font-semibold">{topicName.name}</h4>
+            <button type="button" onClick={() => { setModal({ view: "NewContent", data: { content: Initialcontent, topic: topicName } }) }}
+              className="p-4block rounded-md bg-indigo-600 px-3.5 py-2.5 text-center text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">
+              Create New Post</button>
+          </div>
+        }
 
-        <Pagination />
+        {page != 'details' && <Filter typeOfFilter="filterContent" loading={loading} setLoading={setLoading} />}
+
+        <div className='grid grid-cols-4 gap-6 px-12  py-6 '>
+          {contentList.data.map(data =>
+            <div className=" group  relative inline-block overflow-hidden" style={{ width: "100%", height: "350px" }}>
+              <img src={data.urlImage} style={{ width: "100%", height: "350px" }} />
+              {page != 'details' && <a href={data.url} className="absolute top-2 right-20 block rounded-md bg-cyan-900 px-3.5 py-2.5 text-center text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600" >
+                Link
+              </a>}
+              <button type="button" className=" absolute top-2 right-2 block rounded-md bg-cyan-900 px-3.5 py-2.5 text-center text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+                onClick={() => { setModal({ view: "NewContent", data: { content: data, topic: topicName } }) }}>Edit</button>
+              <div className="w-full  h-[180px] absolute bottom-0 left-0 flex flex-col flex-wrap bg-black opacity-80 translate-y-[133px] duration-700 group-hover:translate-y-0">
+
+                <div className="p-4 w-full">
+                  <p className="text-white text-lg">{data.name}</p>
+                  <p className="text-white text-base pb-3">{data.url}</p>
+                  <p className="text-white text-sm">{data.description}</p>
+                </div>
+              </div>
+            </div>
+          )}
+        </div>
+
+
+        {page != 'details' && <Pagination />}
 
       </div>
-      {modal.view == "InviteNewMaker" && <NewContent setModal={setModal} modal={modal} />}
-      {modal.view == "deleteConfirm" && <DeleteConfirm modal={{ id: modal.data.id, message: modal.data.name, type: "maker" }} />}
+      {modal.view == "NewContent" && <NewContent setModal={setModal} modal={modal} />}
+      {modal.view == "deleteConfirm" && <DeleteConfirm modal={{ id: modal.data.content.id, message: modal.data.content.name, type: "content" }} />}
     </div>
   )
 }

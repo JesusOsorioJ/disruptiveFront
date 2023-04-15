@@ -1,7 +1,9 @@
 import { useNavigate } from 'react-router-dom'
 import { useEffect, useState } from 'react'
-
+import { Initialtopic } from '../types';
+import { getAllTopic } from '../services/topic';
 import { createOneUser } from '../services/user'
+import { LoadingSmall } from '../components/Loading';
 
 export default function Login() {
     const navigate = useNavigate();
@@ -9,6 +11,7 @@ export default function Login() {
     const [form, setForm] = useState({ type: "CREATOR" })
     const [loading, setLoading] = useState(false)
     const [message, setMessage] = useState("")
+    const [ getfirstTopic, setGetfirstTopic] = useState(Initialtopic)
     const [typeUser, setTypeUser] = useState("")
 
     const handlerChange = (e: any) => {
@@ -17,6 +20,11 @@ export default function Login() {
     }
 
     useEffect(() => {
+        (async () => {
+            const responseAllTopic = await getAllTopic({})
+            setGetfirstTopic(responseAllTopic.message.data[0])
+
+          })()
         const myObject = JSON.parse(window.sessionStorage.getItem("myObject") || '{"typeUser":""}')
         if (myObject.typeUser == 'maker') { navigate('/') }
         if (myObject.typeUser == 'admin') { navigate('/admin') }
@@ -32,7 +40,7 @@ export default function Login() {
 
         if (response.message.length > 0) {
             const { id, typeUser, email } = response.message[0]
-            const myObject = { id, typeUser, email, pagination: 10 }
+            const myObject = { id, typeUser, email, pagination: 10,  }
             window.sessionStorage.setItem("myObject", JSON.stringify(myObject));
             setTypeUser(typeUser)
         } else {
@@ -69,7 +77,6 @@ export default function Login() {
                             <div className="relative mb-6">
                                 <select onChange={handlerChange}
                                     id="type"
-                                    autoComplete="country-name"
                                     className="block w-full rounded-md border-0 py-3 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:max-w-xs sm:text-sm sm:leading-6"
                                 >
                                     <option value="CREATOR">CREATOR</option>
@@ -102,28 +109,20 @@ export default function Login() {
                                     type="password"
                                     id="password"
                                     placeholder='Input your password'
-                                    autoComplete="organization"
                                     className="block w-full rounded-md border-0 px-3.5 py-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                                 />
                             </div>
                         </div>
-
-
-
-
                         {/* Submit button  */}
-
                         <button
                             type="submit"
                             className="group relative flex w-full justify-center rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
                         >
                             <span className="absolute inset-y-0 left-0 flex items-center pl-3">
-                                {loading == true && <div className="spinner-border spinner-border-sm text-light" role="status"></div>}
+                                {loading == true && <LoadingSmall/>}
                             </span>
                             Create
                         </button>
-
-
                     </form>
                 </div>
             </div>

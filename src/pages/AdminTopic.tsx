@@ -5,7 +5,7 @@ import { format } from 'date-fns'
 import { getAllTopic } from '../services/topic'
 
 import Header from '../components/Header'
-import FilterMaker from '../components/FilterMaker'
+import Filter from '../components/Filter'
 import NewTopic from '../components/NewTopic'
 import Pagination from '../components/Pagination'
 import DeleteConfirm from '../components/DeleteConfirm'
@@ -31,9 +31,9 @@ export default function Admin() {
     }
 
     (async () => {
-      const responseAllMaker = await getAllTopic({ ...params, pagination })
+      const responseAllTopic = await getAllTopic({ ...params, pagination })
       
-      setUserList(responseAllMaker.message)
+      setUserList(responseAllTopic.message)
       setLoading(false)
     })()
 
@@ -44,14 +44,14 @@ export default function Admin() {
     <div>
       <Header />
       <div className="p-4">
-        <div className='d-flex justify-content-between '>
+        <div className='flex justify-between '>
           <h4>Topic</h4>
           <button type="button" onClick={() => { setModal({ view: "NewTopic", data: Initialtopic }) }}
             className="block rounded-md bg-indigo-600 px-3.5 py-2.5 text-center text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">
               New Topic</button>
         </div>
 
-        <FilterMaker typeOfFilter="filterMaker" loading={loading} setLoading={setLoading} />
+        <Filter typeOfFilter="filterTopic" loading={loading} setLoading={setLoading} />
 
         <table className="w-full text-sm text-left text-gray-500 dark:text-gray-400">
         <thead className='text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400'>
@@ -60,6 +60,7 @@ export default function Admin() {
               <th scope="col" className="px-6 py-3">ID</th>
               <th scope="col" className="px-6 py-3">Name</th>
               <th scope="col" className="px-6 py-3">Categories</th>
+              <th scope="col" className="px-6 py-3">Url image</th>
               <th scope="col" className="px-6 py-3">Created</th>
               {userList.total && <th scope="col">{pagination * parseInt(params.page)} of {userList.total}</th>}
             </tr>
@@ -71,11 +72,12 @@ export default function Admin() {
               <th scope="row" className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
                   {step.id}</th>
                 <th className="px-6 py-4" >{step.name}</th>
-                <td className="px-6 py-4" >{step.categories.map((category) =>category+", ")}</td>
+                <td className="px-6 py-4" >{step.categories.map((category) =>category+" ")}</td>
+                <th className="px-6 py-4" >{step.urlImage.substring(0,30)}</th>
                 <td className="px-6 py-4" >{step.updatedAt&&format(Date.parse(step.updatedAt), 'MM/dd/yyyy HH:mm')}</td>
                 <td className="px-6 py-4" >
                   <button type="button" className="block rounded-md bg-indigo-600 px-3.5 py-2.5 text-center text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
-                    onClick={() => { setModal({ view: "InviteNewMaker", data: step }) }}>Edit</button>
+                    onClick={() => { setModal({ view: "NewTopic", data: step }) }}>Edit</button>
                   
                 </td>
               </tr>
@@ -88,7 +90,7 @@ export default function Admin() {
 
       </div>
       {modal.view == "NewTopic" && <NewTopic setModal={setModal} modal={modal} />}
-      {modal.view == "deleteConfirm" && <DeleteConfirm modal={{  id: modal.data.id, message: modal.data.name, type: "maker" }} />}
+      {modal.view == "deleteConfirm" && <DeleteConfirm modal={{  id: modal.data.id, message: modal.data.name, type: "topic" }} />}
     </div>
   )
 }

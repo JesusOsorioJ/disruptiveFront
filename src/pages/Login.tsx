@@ -1,7 +1,10 @@
 import { useNavigate } from 'react-router-dom'
 import { useEffect, useState } from 'react'
+import { getAllTopic } from '../services/topic';
+import { Initialtopic } from '../types';
 
 import { authenticateUser } from '../services/user'
+import { LoadingSmall } from '../components/Loading';
 
 export default function Login() {
     const navigate = useNavigate();
@@ -9,6 +12,7 @@ export default function Login() {
     const [form, setForm] = useState({})
     const [loading, setLoading] = useState(false)
     const [message, setMessage] = useState("")
+    const [ getfirstTopic, setGetfirstTopic] = useState(Initialtopic)
     const [typeUser, setTypeUser] = useState("")
 
     const handlerChange = (e: any) => {
@@ -17,9 +21,14 @@ export default function Login() {
     }
 
     useEffect(() => {
+        (async () => {
+            const responseAllTopic = await getAllTopic({})
+            setGetfirstTopic(responseAllTopic.message.data[0])
+
+          })()
         const myObject = JSON.parse(window.sessionStorage.getItem("myObject") || '{"typeUser":""}')
-        if (myObject.typeUser == 'maker') { navigate('/') }
-        if (myObject.typeUser == 'admin') { navigate('/admin') }
+        if (myObject.typeUser == 'admin') { navigate('/adminuser') }
+        if (myObject.typeUser == 'CREATOR'|| myObject.typeUser == 'READER') { navigate('/') }
 
     }, [typeUser])
 
@@ -31,7 +40,7 @@ export default function Login() {
         
         if (response.message.length > 0) {
             const { id, typeUser, email } = response.message[0]
-            const myObject = { id, typeUser, email, pagination: 10 }
+            const myObject = { id, typeUser, email, pagination: 10, topicName: getfirstTopic }
             window.sessionStorage.setItem("myObject", JSON.stringify(myObject));
             setTypeUser(typeUser)
         } else {
@@ -103,7 +112,7 @@ export default function Login() {
                             className="group relative flex w-full justify-center rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
                         >
                             <span className="absolute inset-y-0 left-0 flex items-center pl-3">
-                                {loading == true && <div className="spinner-border spinner-border-sm text-light" role="status"></div>}
+                                {loading == true && <LoadingSmall/>}
                             </span>
                             Login
                         </button>

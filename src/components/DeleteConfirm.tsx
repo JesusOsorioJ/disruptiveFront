@@ -3,6 +3,7 @@ import { deleteOneTopic } from "../services/topic"
 import { deleteOneUser } from "../services/user"
 
 import { useState } from "react"
+import { LoadingSmall } from "./Loading"
 
 type Props = {
   modal: {
@@ -12,17 +13,12 @@ type Props = {
 
 
 const DeleteConfirm: React.FC<Props> = ({ modal }) => {
-
   const [message, setMessage] = useState([false, "Eliminar"])
-
   const handlerOnDelete = async () => {
     setMessage([true, "Eliminando"])
-
     if (modal.type == "user") { await deleteOneUser(modal.id)}
     if (modal.type == "topic") { await deleteOneTopic(modal.id) }
     if (modal.type == "content") { await deleteOneContent(modal.id) }
-
-    
     window.location.replace('')
   }
 
@@ -51,7 +47,7 @@ const DeleteConfirm: React.FC<Props> = ({ modal }) => {
           <div className="flex flex-row-reverse gap-4 border-t p-3">
             <button type="button" className="block rounded-md bg-indigo-600 px-3.5 py-2.5 text-center text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
              onClick={handlerOnDelete}>
-              {message[0] == true && <div className="spinner-border spinner-border-sm text-light" role="status"></div>}{message[1]}</button>
+              {message[0] == true && <LoadingSmall/>}{message[1]}</button>
             <button type="button" className="block rounded-md bg-indigo-600 px-3.5 py-2.5 text-center text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
               onClick={handlerOnCancel}>Cancel</button>
           </div>

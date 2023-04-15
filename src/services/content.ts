@@ -1,9 +1,11 @@
 const API_URL = import.meta.env.REACT_APP_API_BASE_URL || "http://localhost:8080/api";
 
 export async function filterByAllContent(body: {}) {
+    
     try {
-        const response = await fetch(`${API_URL}/content/filterbymaker?` +
+        const response = await fetch(`${API_URL}/content/filterbycontent?` +
             new URLSearchParams(body).toString())
+            console.log("body",body);
         const data = await response.json();
         return data;
     } catch (error: any) {
